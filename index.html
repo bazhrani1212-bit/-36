@@ -33,9 +33,7 @@
       border-bottom: 1px solid var(--border);
     }
     .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
-    .brand{
-      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-    }
+    .brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
     .logo{
       width:44px;height:44px;border-radius:12px;
       background: radial-gradient(circle at 30% 30%, #eafff1, #bff0d0 50%, #8ce0aa);
@@ -152,13 +150,9 @@
     }
     textarea{min-height:72px;resize:vertical}
 
-    .inline{
-      display:flex;gap:8px;flex-wrap:wrap;align-items:center
-    }
+    .inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-    .toggle{
-      display:flex;gap:6px;align-items:center;flex-wrap:wrap
-    }
+    .toggle{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
     .toggle label{display:flex;gap:6px;align-items:center;cursor:pointer}
     .toggle input{accent-color: var(--green)}
 
@@ -169,9 +163,7 @@
     }
 
     .notice{background:#fffdf2;border:1px solid #f3e6b5;color:#7a5b00;padding:10px 12px;border-radius:14px;font-size:13px}
-
     .footerNote{color:var(--muted);font-size:12px;margin-top:10px}
-
     .hidden{display:none !important}
 
     @media print{
@@ -197,9 +189,9 @@
         <h1>سجل تنفيذ التجارب العملية – مادة العلوم (المرحلة الابتدائية)</h1>
         <p class="sub">المملكة العربية السعودية – وزارة التعليم – الابتدائية السادسة والثلاثون بالخميس – معلمة المادة/ بدرية الزهراني – مديرة المدرسة/ م نورة الرفاعي</p>
       </div>
-      <div class="pill" title="يتم الحفظ تلقائياً على نفس المتصفح">
+      <div class="pill" title="الحفظ محلي + نسخة احتياطية">
         <span>💾</span>
-        <span>حفظ تلقائي</span>
+        <span>حفظ + نسخ احتياطي</span>
       </div>
     </div>
   </div>
@@ -215,14 +207,24 @@
           <h2>الصفحة الرئيسية</h2>
           <div class="actions noPrint">
             <button class="btn" id="btnExport" title="طباعة الصفحة الحالية">طباعة</button>
+            <button class="btn" id="btnBackup" title="تنزيل نسخة احتياطية (JSON)">تصدير نسخة</button>
+            <label class="btn" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
+              <span>استيراد نسخة</span>
+              <input id="backupFile" type="file" accept="application/json" style="display:none">
+            </label>
             <button class="btn danger" id="btnResetAll" title="حذف كل البيانات المحفوظة على هذا المتصفح">حذف كل البيانات</button>
           </div>
         </div>
-        <p class="muted" style="margin:8px 0 0">اختاري الصف الدراسي ثم الترم، وستظهر قائمة التجارب. كل إدخال تقومين به يُحفظ تلقائياً في <span class="kbd">localStorage</span> على نفس المتصفح.</p>
+        <p class="muted" style="margin:8px 0 0">
+          ✅ الحفظ يتم داخل المتصفح تلقائياً (حتى بعد الإغلاق). وللاستخدام على <b>أي متصفح/جهاز</b> استخدمي: <b>تصدير نسخة</b> ثم <b>استيراد نسخة</b>.
+          إذا كنتِ في وضع خفي أو إعداد يمسح البيانات عند الإغلاق فلن يستمر الحفظ.
+        </p>
 
         <div class="gradeGrid" id="gradeGrid"></div>
 
-        <div class="footerNote">ملاحظة: إذا فتحتِ الموقع من جهاز/متصفح آخر فلن تظهر البيانات السابقة (لأن الحفظ محلي على المتصفح).</div>
+        <div class="footerNote">
+          تلميح: ارفعي الملف باسم <b>index.html</b> في GitHub Pages لضمان ثبات نطاق الموقع (Origin) وبالتالي ثبات التخزين.
+        </div>
       </div>
 
       <div id="viewTerm" class="hidden">
@@ -241,12 +243,13 @@
           <div class="actions noPrint">
             <button class="btn" id="btnBackToTerm">رجوع للترم</button>
             <button class="btn" id="btnPrint">طباعة</button>
+            <button class="btn" id="btnBackup2">تصدير نسخة</button>
             <button class="btn danger" id="btnClearThis">مسح بيانات هذا الترم</button>
           </div>
         </div>
 
         <div class="notice" style="margin:10px 0 12px">
-          ✅ اختاري <b>التاريخ</b> ثم حددي <b>نُفِّذت / لم تُنفَّذ</b>. عند اختيار «لم تُنفَّذ» ستظهر خانة السبب.
+          ✅ اختاري <b>التاريخ</b> ثم حددي <b>نُفِّذت / لم تُنفَّذ</b>. عند اختيار «لم تُنفَّذ» تظهر خانة السبب. كل تغيير يُحفظ فوراً.
         </div>
 
         <div style="overflow:auto;border:1px solid var(--border);border-radius:14px">
@@ -304,12 +307,12 @@
               <input id="labTech" type="text" placeholder="اكتبي الاسم هنا" />
             </label>
             <button class="btn primary" id="btnSaveMeta">حفظ الإعدادات</button>
-            <div class="footerNote">هذه الإعدادات تُحفظ أيضاً على المتصفح وتظهر في الطباعة كبيانات مساعدة.</div>
+            <div class="footerNote">هذه الإعدادات تُحفظ أيضاً (localStorage + IndexedDB).</div>
           </div>
         </div>
 
         <div class="footerNote">
-          تلميح: إذا لم تعمل الأزرار بعد رفعك على GitHub Pages، تأكدي أن الملف اسمه <b>index.html</b> داخل المستودع.
+          إذا استمر عدم الحفظ بعد الإغلاق: افتحي إعدادات المتصفح وتأكدي أن خيار “مسح بيانات المواقع عند الإغلاق” غير مفعّل.
         </div>
       </div>
     </aside>
@@ -318,7 +321,7 @@
 
 <script>
   // =====================
-  // بيانات التجارب (حسب الملفات المرفوعة)
+  // بيانات التجارب
   // =====================
   const EXPERIMENTS = {
     1: {
@@ -587,99 +590,146 @@
     }
   };
 
-  // =====================
-  // ثوابت واجهة
-  // =====================
   const REASONS = [
     "لعدم توفر المواد",
     "عدم تجهيز المحضر للأدوات",
     "عدم قيام المعلم بالتجربة",
     "أسباب أخرى"
   ];
+  const PLACES = ["المختبر","الفصل","مكان آخر"];
 
-  const PLACES = [
-    "المختبر",
-    "الفصل",
-    "مكان آخر"
-  ];
+  // =====================
+  // تخزين مزدوج: localStorage + IndexedDB
+  // =====================
+  const LS_KEY = "science_experiments_log_v2";
+  const IDB_DB = "ScienceExperimentsLogDB";
+  const IDB_STORE = "kv";
+  const IDB_KEY = "data";
+
+  function idbOpen(){
+    return new Promise((resolve, reject)=>{
+      const req = indexedDB.open(IDB_DB, 1);
+      req.onupgradeneeded = ()=>{
+        const db = req.result;
+        if(!db.objectStoreNames.contains(IDB_STORE)){
+          db.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = ()=>resolve(req.result);
+      req.onerror = ()=>reject(req.error);
+    });
+  }
+
+  async function idbGet(){
+    try{
+      const db = await idbOpen();
+      return await new Promise((resolve)=>{
+        const tx = db.transaction(IDB_STORE, "readonly");
+        const st = tx.objectStore(IDB_STORE);
+        const r = st.get(IDB_KEY);
+        r.onsuccess = ()=>resolve(r.result || null);
+        r.onerror = ()=>resolve(null);
+      });
+    }catch(_){ return null; }
+  }
+
+  async function idbSet(value){
+    try{
+      const db = await idbOpen();
+      await new Promise((resolve)=>{
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        const st = tx.objectStore(IDB_STORE);
+        st.put(value, IDB_KEY);
+        tx.oncomplete = ()=>resolve();
+        tx.onerror = ()=>resolve();
+      });
+    }catch(_){}
+  }
+
+  function lsGet(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(_){ return null; }
+  }
+  function lsSet(obj){
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(obj)); }catch(_){}
+  }
+  function normalizeData(d){
+    if(!d || typeof d !== "object") return { meta:{}, entries:{} };
+    d.meta = d.meta && typeof d.meta==="object" ? d.meta : {};
+    d.entries = d.entries && typeof d.entries==="object" ? d.entries : {};
+    return d;
+  }
+  function deepMerge(base, extra){
+    // extra يغطي base عند التعارض
+    const out = structuredClone(base);
+    for(const k of Object.keys(extra||{})){
+      if(extra[k] && typeof extra[k]==="object" && !Array.isArray(extra[k])){
+        out[k] = deepMerge(out[k] || {}, extra[k]);
+      }else{
+        out[k] = extra[k];
+      }
+    }
+    return out;
+  }
+
+  async function loadAll(){
+    const a = normalizeData(lsGet());
+    const b = normalizeData(await idbGet());
+    // دمج للتأكد لو واحد منهم أقدم
+    const merged = deepMerge(a, b);
+    // إعادة كتابة الاثنين بالنسخة المدموجة لضمان الاتساق
+    await saveAll(merged);
+    return merged;
+  }
+
+  async function saveAll(obj){
+    const data = normalizeData(obj);
+    lsSet(data);
+    await idbSet(data);
+  }
+
+  function getPathKey(grade, term){ return `g${grade}_${term}`; }
+
+  async function getEntries(grade, term){
+    const all = await loadAll();
+    const k = getPathKey(grade, term);
+    return all.entries?.[k] || {};
+  }
+
+  async function setEntry(grade, term, idx, entry){
+    const all = await loadAll();
+    const k = getPathKey(grade, term);
+    all.entries[k] = all.entries[k] || {};
+    all.entries[k][idx] = entry;
+    await saveAll(all);
+  }
+
+  async function clearTerm(grade, term){
+    const all = await loadAll();
+    const k = getPathKey(grade, term);
+    if(all.entries && all.entries[k]) delete all.entries[k];
+    await saveAll(all);
+  }
+
+  async function resetAll(){
+    try{ localStorage.removeItem(LS_KEY); }catch(_){}
+    try{
+      const db = await idbOpen();
+      const tx = db.transaction(IDB_STORE, "readwrite");
+      tx.objectStore(IDB_STORE).delete(IDB_KEY);
+    }catch(_){}
+  }
 
   // =====================
   // الحالة العامة
   // =====================
   const state = {
     grade: null,
-    term: null, // 't1' or 't2'
-    meta: {
-      className: "",
-      labTech: ""
-    }
+    term: null,
+    meta: { className:"", labTech:"" }
   };
-
-  // =====================
-  // أدوات تخزين
-  // =====================
-  const LS_KEY = "science_experiments_log_v1";
-
-  function loadAll(){
-    try{
-      const raw = localStorage.getItem(LS_KEY);
-      return raw ? JSON.parse(raw) : { meta:{}, entries:{} };
-    }catch(e){
-      return { meta:{}, entries:{} };
-    }
-  }
-  function saveAll(obj){
-    localStorage.setItem(LS_KEY, JSON.stringify(obj));
-  }
-
-  function getPathKey(grade, term){
-    return `g${grade}_${term}`;
-  }
-
-  function getEntries(grade, term){
-    const all = loadAll();
-    const k = getPathKey(grade, term);
-    return all.entries?.[k] || {};
-  }
-
-  function setEntry(grade, term, idx, entry){
-    const all = loadAll();
-    all.entries = all.entries || {};
-    const k = getPathKey(grade, term);
-    all.entries[k] = all.entries[k] || {};
-    all.entries[k][idx] = entry;
-    saveAll(all);
-  }
-
-  function clearTerm(grade, term){
-    const all = loadAll();
-    const k = getPathKey(grade, term);
-    if(all.entries && all.entries[k]) delete all.entries[k];
-    saveAll(all);
-  }
-
-  function resetAll(){
-    localStorage.removeItem(LS_KEY);
-  }
-
-  function loadMeta(){
-    const all = loadAll();
-    state.meta.className = all.meta?.className || "";
-    state.meta.labTech = all.meta?.labTech || "";
-    el.className.value = state.meta.className;
-    el.labTech.value = state.meta.labTech;
-  }
-
-  function saveMeta(){
-    const all = loadAll();
-    all.meta = all.meta || {};
-    all.meta.className = (el.className.value || "").trim();
-    all.meta.labTech = (el.labTech.value || "").trim();
-    saveAll(all);
-    state.meta.className = all.meta.className;
-    state.meta.labTech = all.meta.labTech;
-    toast("تم حفظ الإعدادات ✅");
-  }
 
   // =====================
   // عناصر DOM
@@ -704,13 +754,16 @@
     btnExport: document.getElementById('btnExport'),
     btnClearThis: document.getElementById('btnClearThis'),
     btnResetAll: document.getElementById('btnResetAll'),
+    btnBackup: document.getElementById('btnBackup'),
+    btnBackup2: document.getElementById('btnBackup2'),
+    backupFile: document.getElementById('backupFile'),
     className: document.getElementById('className'),
     labTech: document.getElementById('labTech'),
-    btnSaveMeta: document.getElementById('btnSaveMeta')
+    btnSaveMeta: document.getElementById('btnSaveMeta'),
   };
 
   // =====================
-  // مساعدات UI
+  // UI helpers
   // =====================
   function show(view){
     el.viewHome.classList.toggle('hidden', view !== 'home');
@@ -723,26 +776,19 @@
     const map = {1:"الصف الأول",2:"الصف الثاني",3:"الصف الثالث",4:"الصف الرابع",5:"الصف الخامس",6:"الصف السادس"};
     return map[g] || `الصف ${g}`;
   }
-
-  function termLabel(t){
-    return t === 't1' ? 'الترم الأول' : 'الترم الثاني';
-  }
+  function termLabel(t){ return t === 't1' ? 'الترم الأول' : 'الترم الثاني'; }
 
   function renderCrumbs(){
     const parts = [];
     parts.push({label:"الرئيسية", action:()=>goHome(), active: !state.grade});
-    if(state.grade){
-      parts.push({label: gradeLabel(state.grade), action:()=>goTerm(state.grade)});
-    }
-    if(state.grade && state.term){
-      parts.push({label: termLabel(state.term), action:()=>goTable(state.grade, state.term), active:true});
-    }
+    if(state.grade) parts.push({label: gradeLabel(state.grade), action:()=>goTerm(state.grade)});
+    if(state.grade && state.term) parts.push({label: termLabel(state.term), action:()=>goTable(state.grade, state.term), active:true});
 
     el.crumbs.innerHTML = '';
     parts.forEach((p, i)=>{
-      const span = document.createElement('span');
-      if(i>0) span.textContent = '›';
-      el.crumbs.appendChild(span);
+      const sep = document.createElement('span');
+      if(i>0) sep.textContent = '›';
+      el.crumbs.appendChild(sep);
 
       if(p.active){
         const s = document.createElement('span');
@@ -757,7 +803,6 @@
       }
     });
 
-    // المسار الحالي في الملخص
     if(!state.grade){
       el.pathNow.textContent = '—';
     }else if(state.grade && !state.term){
@@ -789,6 +834,48 @@
     document.body.appendChild(t);
     setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .25s ease'}, 1200);
     setTimeout(()=>t.remove(), 1550);
+  }
+
+  // =====================
+  // Backup: تصدير/استيراد لأي متصفح
+  // =====================
+  async function downloadBackup(){
+    const all = await loadAll();
+    const payload = {
+      app: "science_experiments_log",
+      version: 2,
+      exportedAt: new Date().toISOString(),
+      data: all
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `سجل-التجارب-علوم-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("تم تصدير النسخة ✅");
+  }
+
+  async function importBackup(file){
+    try{
+      const text = await file.text();
+      const payload = JSON.parse(text);
+      const incoming = payload?.data ? payload.data : payload;
+      const current = await loadAll();
+      // دمج (النسخة المستوردة تغطي الحالية)
+      const merged = deepMerge(current, normalizeData(incoming));
+      await saveAll(merged);
+      await loadMeta(); // يعيد تعبئة الحقول
+      // إعادة رسم الواجهة الحالية
+      if(state.grade && state.term) await renderTable(state.grade, state.term);
+      toast("تم الاستيراد ✅");
+    }catch(e){
+      alert("تعذر استيراد الملف. تأكدي أنه ملف JSON صحيح.");
+    }
   }
 
   // =====================
@@ -825,23 +912,14 @@
     });
   }
 
-  function renderTable(grade, term){
+  async function renderTable(grade, term){
     const list = EXPERIMENTS?.[grade]?.[term] || [];
-    const saved = getEntries(grade, term);
-
+    const saved = await getEntries(grade, term);
     el.tbody.innerHTML='';
 
     list.forEach((name, i)=>{
       const idx = String(i);
-      const data = saved[idx] || {
-        date:'',
-        status:'', // 'done'|'not'
-        week:'',
-        place:'',
-        reason:'',
-        notes:''
-      };
-
+      const data = saved[idx] || { date:'', status:'', week:'', place:'', reason:'', notes:'' };
       const tr = document.createElement('tr');
 
       const tdNo = document.createElement('td');
@@ -871,8 +949,6 @@
       const stNot = wrap.querySelector('input[value="not"]');
       if(data.status === 'done') stDone.checked = true;
       if(data.status === 'not') stNot.checked = true;
-      stDone.addEventListener('change', ()=>{reasonSel.disabled = true; reasonSel.value=''; persist();});
-      stNot.addEventListener('change', ()=>{reasonSel.disabled = false; persist();});
 
       const tdWeek = document.createElement('td');
       const week = document.createElement('input');
@@ -906,10 +982,13 @@
       notes.addEventListener('input', ()=>persist());
       tdNotes.appendChild(notes);
 
+      stDone.addEventListener('change', ()=>{reasonSel.disabled = true; reasonSel.value=''; persist();});
+      stNot.addEventListener('change', ()=>{reasonSel.disabled = false; persist();});
+
       tr.append(tdNo, tdName, tdDate, tdStatus, tdWeek, tdPlace, tdReason, tdNotes);
       el.tbody.appendChild(tr);
 
-      function persist(){
+      async function persist(){
         const status = stDone.checked ? 'done' : stNot.checked ? 'not' : '';
         const entry = {
           date: date.value || '',
@@ -919,18 +998,18 @@
           reason: (status==='not') ? (reasonSel.value || '') : '',
           notes: notes.value || ''
         };
-        setEntry(grade, term, idx, entry);
-        updateStats(grade, term);
+        await setEntry(grade, term, idx, entry);
+        await updateStats(grade, term);
       }
     });
 
-    updateStats(grade, term);
+    await updateStats(grade, term);
   }
 
-  function updateStats(grade, term){
+  async function updateStats(grade, term){
     const list = EXPERIMENTS?.[grade]?.[term] || [];
-    const saved = getEntries(grade, term);
-    let done = 0, not = 0;
+    const saved = await getEntries(grade, term);
+    let done=0, not=0;
     list.forEach((_, i)=>{
       const e = saved[String(i)];
       if(e?.status === 'done') done++;
@@ -942,14 +1021,37 @@
   }
 
   // =====================
-  // تنقّل
+  // Meta (الشعبة/المحضر)
+  // =====================
+  async function loadMeta(){
+    const all = await loadAll();
+    state.meta.className = all.meta?.className || "";
+    state.meta.labTech = all.meta?.labTech || "";
+    el.className.value = state.meta.className;
+    el.labTech.value = state.meta.labTech;
+    renderCrumbs();
+  }
+
+  async function saveMeta(){
+    const all = await loadAll();
+    all.meta = all.meta || {};
+    all.meta.className = (el.className.value || "").trim();
+    all.meta.labTech = (el.labTech.value || "").trim();
+    await saveAll(all);
+    state.meta.className = all.meta.className;
+    state.meta.labTech = all.meta.labTech;
+    renderCrumbs();
+    toast("تم حفظ الإعدادات ✅");
+  }
+
+  // =====================
+  // تنقل
   // =====================
   function goHome(){
     state.grade = null;
     state.term = null;
     show('home');
   }
-
   function goTerm(grade){
     state.grade = grade;
     state.term = null;
@@ -957,12 +1059,11 @@
     renderTerms(grade);
     show('term');
   }
-
-  function goTable(grade, term){
+  async function goTable(grade, term){
     state.grade = grade;
     state.term = term;
     el.tableTitle.textContent = `التجارب – ${gradeLabel(grade)} – ${termLabel(term)}`;
-    renderTable(grade, term);
+    await renderTable(grade, term);
     show('table');
   }
 
@@ -977,9 +1078,7 @@
       .replaceAll('"','&quot;')
       .replaceAll("'",'&#039;');
   }
-  function escapeAttr(s){
-    return escapeHtml(s);
-  }
+  function escapeAttr(s){ return escapeHtml(s); }
 
   // =====================
   // أحداث
@@ -989,31 +1088,42 @@
   el.btnPrint.addEventListener('click', ()=>window.print());
   el.btnExport.addEventListener('click', ()=>window.print());
 
-  el.btnClearThis.addEventListener('click', ()=>{
+  el.btnBackup.addEventListener('click', downloadBackup);
+  el.btnBackup2.addEventListener('click', downloadBackup);
+
+  el.backupFile.addEventListener('change', async (e)=>{
+    const f = e.target.files?.[0];
+    if(f) await importBackup(f);
+    e.target.value = "";
+  });
+
+  el.btnClearThis.addEventListener('click', async ()=>{
     if(!state.grade || !state.term) return;
     const ok = confirm('هل تريدين مسح بيانات هذا الترم فقط؟');
     if(!ok) return;
-    clearTerm(state.grade, state.term);
-    renderTable(state.grade, state.term);
+    await clearTerm(state.grade, state.term);
+    await renderTable(state.grade, state.term);
     toast('تم مسح بيانات الترم ✅');
   });
 
-  el.btnResetAll.addEventListener('click', ()=>{
+  el.btnResetAll.addEventListener('click', async ()=>{
     const ok = confirm('سيتم حذف كل البيانات المحفوظة على هذا المتصفح. هل أنتِ متأكدة؟');
     if(!ok) return;
-    resetAll();
-    loadMeta();
+    await resetAll();
+    await loadMeta();
     toast('تم الحذف ✅');
   });
 
-  el.btnSaveMeta.addEventListener('click', ()=>saveMeta());
+  el.btnSaveMeta.addEventListener('click', saveMeta);
 
   // =====================
   // تشغيل
   // =====================
-  renderGrades();
-  loadMeta();
-  goHome();
+  (async function init(){
+    renderGrades();
+    await loadMeta();
+    goHome();
+  })();
 </script>
 </body>
 </html>
