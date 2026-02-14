@@ -1,954 +1,1019 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>سجل تنفيذ التجارب العلمية</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سجل تنفيذ التجارب العملية - مادة العلوم (ابتدائي)</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --text:#e8eefc;
-      --muted:#9fb0d0;
-      --border:rgba(255,255,255,.12);
-      --accent:#60a5fa;
-      --danger:#ef4444;
-      --success:#22c55e;
-      --shadow: 0 12px 30px rgba(0,0,0,.35);
-      --radius:16px;
+      --green:#0f7a3a;
+      --green2:#1aa553;
+      --bg:#f6fbf7;
+      --card:#ffffff;
+      --text:#123;
+      --muted:#667;
+      --border:#d9e6dc;
+      --danger:#b42318;
+      --shadow: 0 8px 22px rgba(16, 24, 40, 0.08);
+      --radius: 16px;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, "Noto Kufi Arabic", "Noto Sans Arabic", sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, rgba(96,165,250,.22), transparent 50%),
-                  radial-gradient(1200px 800px at 90% 10%, rgba(34,197,94,.12), transparent 55%),
-                  var(--bg);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
       color:var(--text);
+      background: linear-gradient(180deg, var(--bg), #fff 60%);
     }
-
     header{
-      position:sticky; top:0; z-index:10;
-      padding:14px 16px;
-      background: rgba(11,18,32,.72);
-      backdrop-filter: blur(10px);
+      position: sticky;
+      top:0;
+      z-index:10;
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
     }
-    .head-wrap{
-      max-width:1150px; margin:0 auto;
-      display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px}
+    .brand{
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
     }
-    .brand{display:flex; gap:12px; align-items:center}
     .logo{
-      width:46px; height:46px; display:grid; place-items:center;
-      border-radius:14px;
-      background: linear-gradient(135deg, rgba(96,165,250,.25), rgba(34,197,94,.14));
+      width:44px;height:44px;border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, #eafff1, #bff0d0 50%, #8ce0aa);
       border:1px solid var(--border);
+      display:grid;place-items:center;
       box-shadow: var(--shadow);
-      font-size:20px;
+      flex:0 0 auto;
     }
-    .titles h1{margin:0; font-size:17px; line-height:1.35}
-    .titles .sub{margin:4px 0 0; color:var(--muted); font-size:12px; line-height:1.6}
-    .actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:flex-end}
-    .btn{
-      border:none;
-      border-radius: 12px;
-      padding:10px 12px;
-      background: rgba(96,165,250,.18);
-      color: var(--text);
-      border:1px solid rgba(96,165,250,.35);
-      cursor:pointer;
-      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
-      font-weight:700;
-    }
-    .btn:hover{filter: brightness(1.05); transform: translateY(-1px)}
-    .btn:disabled{opacity:.45; cursor:not-allowed; transform:none}
-    .btn.ghost{background: transparent;border:1px solid var(--border);}
-    .btn.danger{background: rgba(239,68,68,.14);border-color: rgba(239,68,68,.35);}
+    .logo svg{width:26px;height:26px}
+    .brand h1{margin:0;font-size:18px;line-height:1.2}
+    .brand .sub{margin:0;color:var(--muted);font-size:13px}
 
-    main{max-width:1150px; margin:0 auto; padding:16px}
-    .toolbar{
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
-      margin-top:10px;
-    }
-    .crumbs{
-      color:var(--muted);
-      padding:10px 12px;
-      border:1px solid var(--border);
-      background: rgba(16,26,45,.45);
-      border-radius: 999px;
-      font-size:13px;
-    }
-    .tools{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
-    .input{
-      width: 220px;
-      max-width: 80vw;
-      padding:10px 12px;
-      border-radius: 12px;
-      border:1px solid var(--border);
-      background: rgba(16,26,45,.6);
-      color: var(--text);
-      outline: none;
-    }
-    select.input{width: 160px}
-    .input::placeholder{color: rgba(159,176,208,.75)}
+    main{padding:18px 0 32px}
 
-    .grid-cards{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap:12px;
-      margin-top:14px;
+    .grid{display:grid;gap:14px}
+    @media (min-width: 860px){
+      .grid.cols-2{grid-template-columns: 1.2fr .8fr}
     }
-    @media (max-width: 900px){ .grid-cards{grid-template-columns: repeat(2, minmax(0, 1fr))} }
-    @media (max-width: 560px){ .grid-cards{grid-template-columns: 1fr} }
 
     .card{
-      background: linear-gradient(180deg, rgba(16,26,45,.95), rgba(15,23,48,.85));
+      background:var(--card);
       border:1px solid var(--border);
       border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding:14px;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      transition: transform .12s ease, border-color .12s ease;
-      user-select:none;
     }
-    .card:hover{transform: translateY(-2px); border-color: rgba(96,165,250,.35)}
-    .card .title{font-size:16px; margin:0 0 6px}
-    .card .meta{color:var(--muted); font-size:13px; line-height:1.6}
 
-    .panel{
-      margin-top:14px;
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      background: rgba(16,26,45,.45);
-      box-shadow: var(--shadow);
-      padding:12px;
-      cursor:default;
-    }
-    .badges{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
-    .badge{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .badge.done{background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.35);}
-    .badge.notDone{background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.35);}
-
-    table{
-      width:100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      overflow:hidden;
-      border-radius: var(--radius);
-      border:1px solid var(--border);
-      background: rgba(16,26,45,.55);
-      box-shadow: var(--shadow);
-      margin-top:12px;
-    }
-    th, td{
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      vertical-align: middle;
+    .crumbs{
+      display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+      color:var(--muted);
       font-size:13px;
+      margin:0 0 12px;
     }
-    th{
-      background: rgba(15,23,48,.85);
-      color: var(--muted);
-      font-weight: 800;
-      text-align: right;
-      position:sticky; top:0;
-    }
-    tr:hover td{background: rgba(96,165,250,.06)}
-    a.link{color: var(--accent); text-decoration:none; cursor:pointer; font-weight:800}
-    .small{color:var(--muted); font-size:12px}
-
-    footer{
-      margin:14px 0 0;
-      display:flex; justify-content:space-between; gap:10px;
-      color: var(--muted);
-      font-size:12px;
-      flex-wrap:wrap;
+    .crumbs button{
+      border:none;background:none;color:var(--green);cursor:pointer;
+      padding:0;margin:0;font:inherit;text-decoration:underline;
     }
 
-    dialog{
-      border:none;
-      border-radius: var(--radius);
-      padding:0;
-      width: min(920px, 96vw);
-      background: transparent;
-    }
-    dialog::backdrop{background: rgba(0,0,0,.55)}
-    .modal{
-      background: linear-gradient(180deg, rgba(16,26,45,.98), rgba(15,23,48,.95));
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-    }
-    .modal-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;}
-    .icon-btn{
-      border:none; background: transparent; color: var(--text);
-      font-size:18px; cursor:pointer;
-      padding:6px 10px; border-radius: 10px;
-      border:1px solid var(--border);
-    }
-    .form-grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:10px;
-    }
-    .field{display:flex; flex-direction:column; gap:6px}
-    .field label{color: var(--muted); font-size:12px}
-    .field.full{grid-column: 1 / -1}
-    textarea{width:100%; resize: vertical}
+    .sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .sectionTitle h2{margin:0;font-size:16px}
 
-    .chips{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-    .chip{
-      display:flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius: 999px;
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
       border:1px solid var(--border);
-      background: rgba(16,26,45,.55);
-      font-size:13px;
-    }
-    .chip input{accent-color: var(--accent)}
-    .chip.success{border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.08)}
-    .chip.danger{border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.06)}
-
-    .modal-actions{display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap}
-    .toast{
-      position:fixed;
-      bottom:14px;
-      right:14px;
-      background: rgba(16,26,45,.95);
-      border:1px solid var(--border);
-      box-shadow: var(--shadow);
+      background:#fff;
+      color:var(--text);
       padding:10px 12px;
-      border-radius: 14px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:600;
       font-size:13px;
-      color: var(--text);
-      opacity:0;
-      transform: translateY(6px);
-      transition: opacity .18s ease, transform .18s ease;
-      pointer-events:none;
-      z-index:999;
     }
-    .toast.show{opacity:1; transform: translateY(0)}
+    .btn.primary{
+      background: linear-gradient(180deg, var(--green2), var(--green));
+      color:#fff;
+      border-color: transparent;
+    }
+    .btn.danger{border-color:#ffd0cb;color:var(--danger);background:#fff5f4}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#f2fff7;
+      border:1px solid #cfeedd;
+      color:var(--green);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .gradeGrid{display:grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap:10px;margin-top:12px}
+    @media (min-width: 540px){
+      .gradeGrid{grid-template-columns: repeat(3, minmax(0, 1fr));}
+    }
+    .tile{
+      border:1px solid var(--border);
+      border-radius: 16px;
+      padding:12px;
+      background: linear-gradient(180deg, #ffffff, #f6fff9);
+      cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      box-shadow: 0 4px 14px rgba(16,24,40,.06);
+      transition: transform .08s ease, border-color .08s ease;
+    }
+    .tile:hover{transform: translateY(-1px);border-color:#bfe6cf}
+    .tile strong{font-size:14px}
+    .tile small{color:var(--muted)}
+
+    .termGrid{display:grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap:10px;margin-top:12px}
+
+    table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden}
+    th, td{
+      border-bottom:1px solid var(--border);
+      padding:10px 8px;
+      vertical-align:top;
+      font-size:13px;
+    }
+    th{background:#f3fff7;color:#0c4a2a;text-align:right;position:sticky;top:76px;z-index:2}
+    tr:last-child td{border-bottom:none}
+
+    .rowTitle{font-weight:800}
+    .muted{color:var(--muted)}
+
+    input[type="date"], input[type="number"], input[type="text"], select, textarea{
+      width:100%;
+      padding:9px 10px;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background:#fff;
+      font:inherit;
+      font-size:13px;
+      outline:none;
+    }
+    textarea{min-height:72px;resize:vertical}
+
+    .inline{
+      display:flex;gap:8px;flex-wrap:wrap;align-items:center
+    }
+
+    .toggle{
+      display:flex;gap:6px;align-items:center;flex-wrap:wrap
+    }
+    .toggle label{display:flex;gap:6px;align-items:center;cursor:pointer}
+    .toggle input{accent-color: var(--green)}
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;color:#333;background:#f2f4f7;border:1px solid #e4e7ec;
+      padding:2px 6px;border-radius:8px
+    }
+
+    .notice{background:#fffdf2;border:1px solid #f3e6b5;color:#7a5b00;padding:10px 12px;border-radius:14px;font-size:13px}
+
+    .footerNote{color:var(--muted);font-size:12px;margin-top:10px}
+
+    .hidden{display:none !important}
+
+    @media print{
+      header, .noPrint{display:none !important}
+      body{background:#fff}
+      .card{box-shadow:none}
+      th{top:0}
+    }
   </style>
 </head>
-
 <body>
 <header>
-  <div class="head-wrap">
+  <div class="wrap">
     <div class="brand">
-      <div class="logo">🔬</div>
-      <div class="titles">
-        <h1>وزارة التعليم • الإدارة العامة لتعليم بمنطقة عسير</h1>
-        <div class="sub">
-          المدرسة الابتدائية السادسة والثلاثون بالخميس — مديرة المدرسة: نورة الرفاعي — المعلمة: بدرية الزهراني
-        </div>
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 19c2.5-6.5 9.5-6.5 12 0" stroke="#0f7a3a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M7 8c0-2.8 2.2-5 5-5s5 2.2 5 5c0 2.4-1.6 4.4-3.8 4.9V15" stroke="#0f7a3a" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="12" cy="18" r="1.2" fill="#0f7a3a"/>
+        </svg>
       </div>
-    </div>
-
-    <div class="actions">
-      <button class="btn ghost" id="btnHome">الرئيسية</button>
-      <button class="btn" id="btnExportCsv" disabled>تصدير CSV</button>
-      <button class="btn danger" id="btnClearTerm" disabled>مسح بيانات الترم</button>
+      <div style="min-width:240px;flex:1 1 auto">
+        <h1>سجل تنفيذ التجارب العملية – مادة العلوم (المرحلة الابتدائية)</h1>
+        <p class="sub">المملكة العربية السعودية – وزارة التعليم – الابتدائية السادسة والثلاثون بالخميس – معلمة المادة/ بدرية الزهراني – مديرة المدرسة/ م نورة الرفاعي</p>
+      </div>
+      <div class="pill" title="يتم الحفظ تلقائياً على نفس المتصفح">
+        <span>💾</span>
+        <span>حفظ تلقائي</span>
+      </div>
     </div>
   </div>
 </header>
 
 <main>
-  <section class="toolbar">
-    <div class="crumbs" id="crumbs">الرئيسية</div>
+  <div class="wrap grid cols-2">
+    <section class="card">
+      <div class="crumbs" id="crumbs"></div>
 
-    <div class="tools">
-      <input class="input" id="search" placeholder="ابحث عن تجربة..." disabled />
-      <select class="input" id="filterStatus" disabled>
-        <option value="all">كل الحالات</option>
-        <option value="done">نُفّذ</option>
-        <option value="notDone">لم يُنفّذ</option>
-      </select>
-      <select class="input" id="filterPlace" disabled>
-        <option value="all">كل الأماكن</option>
-        <option value="lab">المختبر</option>
-        <option value="class">الفصل</option>
-        <option value="other">مكان آخر</option>
-      </select>
-    </div>
-  </section>
+      <div id="viewHome">
+        <div class="sectionTitle">
+          <h2>الصفحة الرئيسية</h2>
+          <div class="actions noPrint">
+            <button class="btn" id="btnExport" title="طباعة الصفحة الحالية">طباعة</button>
+            <button class="btn danger" id="btnResetAll" title="حذف كل البيانات المحفوظة على هذا المتصفح">حذف كل البيانات</button>
+          </div>
+        </div>
+        <p class="muted" style="margin:8px 0 0">اختاري الصف الدراسي ثم الترم، وستظهر قائمة التجارب. كل إدخال تقومين به يُحفظ تلقائياً في <span class="kbd">localStorage</span> على نفس المتصفح.</p>
 
-  <div id="view"></div>
+        <div class="gradeGrid" id="gradeGrid"></div>
 
-  <footer>
-    <div>يعمل بدون سيرفر • الحفظ تلقائيًا على نفس المتصفح</div>
-    <div>آخر حفظ: <span id="lastSaved">—</span></div>
-  </footer>
+        <div class="footerNote">ملاحظة: إذا فتحتِ الموقع من جهاز/متصفح آخر فلن تظهر البيانات السابقة (لأن الحفظ محلي على المتصفح).</div>
+      </div>
+
+      <div id="viewTerm" class="hidden">
+        <div class="sectionTitle">
+          <h2 id="termTitle">اختيار الترم</h2>
+          <div class="actions noPrint">
+            <button class="btn" id="btnBackToHome">رجوع للرئيسية</button>
+          </div>
+        </div>
+        <div class="termGrid" id="termGrid"></div>
+      </div>
+
+      <div id="viewTable" class="hidden">
+        <div class="sectionTitle">
+          <h2 id="tableTitle">التجارب</h2>
+          <div class="actions noPrint">
+            <button class="btn" id="btnBackToTerm">رجوع للترم</button>
+            <button class="btn" id="btnPrint">طباعة</button>
+            <button class="btn danger" id="btnClearThis">مسح بيانات هذا الترم</button>
+          </div>
+        </div>
+
+        <div class="notice" style="margin:10px 0 12px">
+          ✅ اختاري <b>التاريخ</b> ثم حددي <b>نُفِّذت / لم تُنفَّذ</b>. عند اختيار «لم تُنفَّذ» ستظهر خانة السبب.
+        </div>
+
+        <div style="overflow:auto;border:1px solid var(--border);border-radius:14px">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:42px">م</th>
+                <th>اسم التجربة</th>
+                <th style="min-width:140px">تاريخ الإجراء</th>
+                <th style="min-width:160px">الحالة</th>
+                <th style="min-width:140px">أسبوع التجربة</th>
+                <th style="min-width:150px">مكان الإجراء</th>
+                <th style="min-width:170px">سبب عدم التنفيذ</th>
+                <th style="min-width:220px">ملاحظات/توقيع</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="footerNote">* يمكنك تعديل أي صف في أي وقت، وسيتم التحديث تلقائياً.</div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="sectionTitle">
+        <h2>ملخص سريع</h2>
+      </div>
+
+      <div class="grid" style="margin-top:10px">
+        <div class="card" style="box-shadow:none;background:#fbfffd">
+          <div class="muted">المسار الحالي</div>
+          <div style="font-weight:900;margin-top:6px" id="pathNow">—</div>
+        </div>
+
+        <div class="card" style="box-shadow:none;background:#fbfffd">
+          <div class="muted">إحصاءات الترم الحالي</div>
+          <div class="inline" style="margin-top:8px">
+            <div class="pill" id="statTotal">الإجمالي: —</div>
+            <div class="pill" id="statDone">نُفِّذت: —</div>
+            <div class="pill" id="statNot">لم تُنفَّذ: —</div>
+          </div>
+          <div class="footerNote">يتحدث الملخص عند فتح الترم.</div>
+        </div>
+
+        <div class="card" style="box-shadow:none;background:#fbfffd">
+          <div class="muted">إعدادات سريعة</div>
+          <div class="grid" style="margin-top:10px">
+            <label>
+              اسم الفصل/الشعبة (اختياري)
+              <input id="className" type="text" placeholder="مثال: 3/ب أو 6/أ" />
+            </label>
+            <label>
+              اسم محضر/ة المختبر (اختياري)
+              <input id="labTech" type="text" placeholder="اكتبي الاسم هنا" />
+            </label>
+            <button class="btn primary" id="btnSaveMeta">حفظ الإعدادات</button>
+            <div class="footerNote">هذه الإعدادات تُحفظ أيضاً على المتصفح وتظهر في الطباعة كبيانات مساعدة.</div>
+          </div>
+        </div>
+
+        <div class="footerNote">
+          تلميح: إذا لم تعمل الأزرار بعد رفعك على GitHub Pages، تأكدي أن الملف اسمه <b>index.html</b> داخل المستودع.
+        </div>
+      </div>
+    </aside>
+  </div>
 </main>
 
-<dialog id="dlg">
-  <form method="dialog" class="modal" id="dlgForm">
-    <div class="modal-head">
-      <h3 id="dlgTitle" style="margin:0">تفاصيل التجربة</h3>
-      <button class="icon-btn" value="cancel" aria-label="إغلاق">✕</button>
-    </div>
-
-    <div class="form-grid">
-      <div class="field">
-        <label>المادة</label>
-        <input class="input" id="f_subject" type="text" readonly />
-      </div>
-
-      <div class="field">
-        <label>الفصل</label>
-        <input class="input" id="f_class" type="text" readonly />
-      </div>
-
-      <div class="field full">
-        <label>اسم التجربة</label>
-        <input class="input" id="f_title" type="text" readonly />
-      </div>
-
-      <div class="field">
-        <label>اسم المعلمة</label>
-        <input class="input" id="f_teacher" type="text" placeholder="بدرية الزهراني" />
-      </div>
-
-      <div class="field">
-        <label>أسبوع التجربة</label>
-        <input class="input" id="f_week" type="number" min="1" placeholder="مثال: 3" />
-      </div>
-
-      <div class="field">
-        <label>تاريخ الإجراء (اختيار تفاعلي)</label>
-        <input class="input" id="f_date" type="date" />
-      </div>
-
-      <div class="field full">
-        <label>مكان إجراء التجربة</label>
-        <div class="chips">
-          <label class="chip"><input type="radio" name="place" value="lab" /> المختبر</label>
-          <label class="chip"><input type="radio" name="place" value="class" /> الفصل</label>
-          <label class="chip"><input type="radio" name="place" value="other" /> مكان آخر</label>
-        </div>
-        <input class="input" id="f_placeOther" type="text" placeholder="إذا كان مكان آخر، اكتب الوصف..." style="display:none;margin-top:8px" />
-      </div>
-
-      <div class="field full">
-        <label>الحالة</label>
-        <div class="chips">
-          <label class="chip success"><input type="radio" name="status" value="done" /> نُفّذ</label>
-          <label class="chip danger"><input type="radio" name="status" value="notDone" /> لم يُنفّذ</label>
-        </div>
-      </div>
-
-      <div class="field full" id="reasonsBox" style="display:none">
-        <label>سبب عدم التنفيذ</label>
-        <div class="chips" style="align-items:flex-start">
-          <label class="chip"><input type="checkbox" value="materials" /> لعدم توفر المواد</label>
-          <label class="chip"><input type="checkbox" value="prep" /> عدم تجهيز المحضر للأدوات</label>
-          <label class="chip"><input type="checkbox" value="teacher" /> عدم قيام المعلم بالتجربة</label>
-          <label class="chip"><input type="checkbox" value="other" /> أسباب أخرى</label>
-        </div>
-        <input class="input" id="f_reasonOther" type="text" placeholder="أسباب أخرى (اختياري)..." style="margin-top:8px" />
-      </div>
-
-      <div class="field full">
-        <label>ملاحظات</label>
-        <textarea class="input" id="f_notes" rows="3" placeholder="اكتب أي ملاحظات..."></textarea>
-      </div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn" id="btnSave" value="default">حفظ</button>
-      <button class="btn ghost" value="cancel">إغلاق</button>
-    </div>
-  </form>
-</dialog>
-
-<div class="toast" id="toast">تم الحفظ ✅</div>
-
 <script>
-(() => {
-  // ===== بيانات (عينة كاملة + قابلة للتعديل) =====
-  // ملاحظة: لو تريدين أضع نفس قوائم الترم الأول/الثاني حرفيًا من ملفاتك، أرسل لي الصفحات/القائمة وسأثبتها لك.
-  const DATA = {
-    teacherNameDefault: "بدرية الزهراني",
-    grades: [
-      { grade: 1, classes: [{ className: "1ب", terms: {
-        t1: [
-          {id:"1t1-1", subject:"علوم", title:"ما المخلوقات الحية؟ وما الأشياء غير الحية؟"},
-          {id:"1t1-2", subject:"علوم", title:"ما أجزاء النبات؟"},
-          {id:"1t1-3", subject:"علوم", title:"كيف ينتقل الماء في النبات؟"}
-        ],
-        t2: [
-          {id:"1t2-1", subject:"علوم", title:"ما الذي ألاحظه على الهواء؟"},
-          {id:"1t2-2", subject:"علوم", title:"كيف أقيس الطقس (الحرارة)؟"}
-        ]
-      }}]},
-
-      { grade: 2, classes: [{ className: "2ب", terms: {
-        t1: [
-          {id:"2t1-1", subject:"علوم", title:"كيف يتحرك الضفدع؟"},
-          {id:"2t1-2", subject:"علوم", title:"ما أجزاء البذرة؟"}
-        ],
-        t2: [
-          {id:"2t2-1", subject:"علوم", title:"لماذا لا نرى الشمس في الليل؟"},
-          {id:"2t2-2", subject:"علوم", title:"حركة الشمس"}
-        ]
-      }}]},
-
-      { grade: 3, classes: [{ className: "3ب", terms: {
-        t1: [
-          {id:"3t1-1", subject:"علوم", title:"ما أوجه الاختلاف بين المخلوقات الحية والأشياء غير الحية؟"},
-          {id:"3t1-2", subject:"علوم", title:"ألاحظ الخلايا"}
-        ],
-        t2: [
-          {id:"3t2-1", subject:"علوم", title:"كيف أثبت أن الهواء موجود حولي؟"},
-          {id:"3t2-2", subject:"علوم", title:"أعمل كيس الرياح"}
-        ]
-      }}]},
-
-      { grade: 4, classes: [{ className: "4ب", terms: {
-        t1: [
-          {id:"4t1-1", subject:"علوم", title:"مما تتكون المخلوقات الحية؟"},
-          {id:"4t1-2", subject:"علوم", title:"الخلايا والأنسجة والأعضاء"}
-        ],
-        t2: [
-          {id:"4t2-1", subject:"علوم", title:"ما سبب تعاقب الليل والنهار؟"},
-          {id:"4t2-2", subject:"علوم", title:"الشمس والفصول"}
-        ]
-      }}]},
-
-      { grade: 5, classes: [{ className: "5ب", terms: {
-        t1: [
-          {id:"5t1-1", subject:"علوم", title:"كيف يمكن تصنيف المخلوقات الحية؟"},
-          {id:"5t1-2", subject:"علوم", title:"عفن الخبز"}
-        ],
-        t2: [
-          {id:"5t2-1", subject:"علوم", title:"الضغط الجوي والحجم"},
-          {id:"5t2-2", subject:"علوم", title:"مزج الألوان"}
-        ]
-      }}]},
-
-      { grade: 6, classes: [{ className: "6ب", terms: {
-        t1: [
-          {id:"6t1-1", subject:"علوم", title:"كيف تبدو الخلايا؟"},
-          {id:"6t1-2", subject:"علوم", title:"الانتشار والخاصية الأسموزية"}
-        ],
-        t2: [
-          {id:"6t2-1", subject:"علوم", title:"كيف تعرف الكواكب؟"},
-          {id:"6t2-2", subject:"علوم", title:"عمل نموذج للخسوف والكسوف"}
-        ]
-      }}]}
-    ]
+  // =====================
+  // بيانات التجارب (حسب الملفات المرفوعة)
+  // =====================
+  const EXPERIMENTS = {
+    1: {
+      t1: [
+        "ما المخلوقات الحية؟ وما الأشياء غير الحية؟",
+        "ما أجزاء النبات؟",
+        "كيف ينتقل الماء في النبات؟",
+        "كيف أصنف البذور؟",
+        "كيف ترسم زهرة؟",
+        "ماذا يحدث للنبات إذا لم يحصل على ماء؟",
+        "ما أنواع الحيوانات؟",
+        "كيف تساعدني أسناني على تناول الأطعمة المختلفة؟",
+        "ماذا تأكل الحيوانات؟",
+        "أين تعيش الحيوانات؟",
+        "كيف تعيش النباتات والحيوانات في الماء؟"
+      ],
+      t2: [
+        "ما الذي ألاحظه على الهواء؟",
+        "كيف أقيس الطقس (الحرارة)؟",
+        "كيف تدفئنا الملابس؟",
+        "كيف يختلف مظهر أوراق النباتات في كل فصل؟",
+        "ما الذي ألاحظه على بعض الأشياء؟",
+        "المادة",
+        "كيف أقارن بين بعض الأجسام الصلبة؟",
+        "خصائص المواد الصلبة",
+        "ما خصائص السائل؟",
+        "قياس كمية السائل",
+        "كيف يمكنني أن أغير بعض المواد الصلبة؟",
+        "كيف تتغير المادة؟",
+        "هل يمكنني فصل مكونات المخلوط؟",
+        "ما المخلوط؟",
+        "كيف أعرف أن الشيء تحرك؟",
+        "كيف أحرك الأشياء؟",
+        "كيف تختلف القوى؟",
+        "كيف تغير الحرارة الأشياء؟",
+        "ما المواد التي يمر الضوء عبرها؟",
+        "مصادر الضوء"
+      ]
+    },
+    2: {
+      t1: [
+        "كيف يتمكن الضفدع من الجلوس على ورقة نبات الزئبق المائي؟",
+        "كيف يتحرك الضفدع؟",
+        "ما الذي تحتاج إليه أوراق النباتات لكي تعيش؟",
+        "ما أجزاء البذرة؟",
+        "كيف تنمو البذور؟",
+        "كيف يمكن أن نصنف الحيوانات؟",
+        "حيواني المفضل",
+        "ما أوجه الشبه بين الصغار وبين الكبار؟ وما أوجه الاختلاف؟",
+        "دورة حياة حيوان",
+        "كيف تنمو دودة الأرض؟",
+        "أين تعيش الحيوانات؟",
+        "ماذا تأكل الحيوانات؟",
+        "سلسلة غذائية",
+        "كيف يساعد شكل الورقة على نمو النبات؟",
+        "ما الغابة؟"
+      ],
+      t2: [
+        "لماذا لا نرى الشمس في الليل؟",
+        "حركة الشمس",
+        "ماذا يلبس الناس في كل فصل؟",
+        "أعمل طبق الفصول",
+        "كيف يمكننا رؤية القمر بالليل؟",
+        "ما أوجه الشبه بين المدارات؟ وما أوجه الاختلاف بينها؟",
+        "أعمل نموذجاً للنظام الشمسي",
+        "ما خواص هذه المواد الصلبة؟",
+        "قياس الكتلة",
+        "ماذا يحدث للماء في الأوعية الزجاجية ذات الأشكال المختلفة؟",
+        "تصنيف المادة",
+        "كيف أغير الصلصال؟",
+        "ألاحظ تغيراً كيميائياً",
+        "كيف تغير الحرارة الأشياء؟",
+        "حالات الماء",
+        "كيف أجعل الأشياء تتحرك؟",
+        "الاحتكاك والأجسام المتحركة",
+        "ماذا يستطيع المغناطيس أن يجذب؟",
+        "القطبان المغناطيسيان متشابهان أم مختلفان؟",
+        "كيف أستطيع المقارنة بين قوة المغناطيسات المختلفة؟",
+        "أين تنصهر مكعبات الثلج أسرع؟",
+        "أختبر درجة حرارة كل من التربة والماء والهواء",
+        "ما الذي يجعل المصباح الكهربائي يضيء؟",
+        "أحرك دودة ورقية"
+      ]
+    },
+    3: {
+      t1: [
+        "ما أوجه الاختلاف بين المخلوقات الحية والأشياء غير الحية؟",
+        "ألاحظ الخلايا",
+        "فيم تتشابه النباتات؟",
+        "ملاحظة سيقان النباتات",
+        "ما الذي تحتاج إليه النباتات لكي تعيش وتنمو؟",
+        "هل تحتاج البذور إلى الماء لتنبت وتنمو؟",
+        "الثمار والبذور",
+        "كيف تنمو اليرقة وتتغير؟",
+        "دورة حياة الطيور",
+        "كيف أصمم نموذجاً لشبكة غذائية؟",
+        "ألاحظ المحاليل",
+        "هل يساعد الدهن الحيوانات على العيش في البيئة الباردة؟",
+        "تخزين الماء",
+        "كيف تغير الديدان بيئتها؟",
+        "التلوث",
+        "كيف يؤثر الفيضان في النباتات؟",
+        "التغيرات في النظام البيئي"
+      ],
+      t2: [
+        "كيف أثبت أن الهواء موجود حولي؟",
+        "أعمل كيس الرياح",
+        "كيف تساعدنا الغيوم على توقع الطقس؟",
+        "صوت الرعد",
+        "كيف تتكون قطرات المطر؟",
+        "تشكل الغيوم",
+        "ما العلاقة بين درجة الحرارة وهطول الأمطار؟",
+        "مقارنة المناخات",
+        "كيف أصف الأجسام من حولي؟",
+        "أقيس الكتلة والحجم",
+        "فيم تختلف المواد الصلبة عن السوائل؟",
+        "أقارن بين المواد الصلبة والسائلة والغازية",
+        "كيف يمكنني تغيير المادة؟",
+        "أفصل مكونات المخلوط",
+        "كيف تتغير المادة؟",
+        "ألاحظ التغير الكيميائي",
+        "كيف أصف موقع جسم؟",
+        "قياس السرعة",
+        "كيف يؤثر الدفع في حركة الأجسام؟",
+        "ألاحظ الجاذبية",
+        "كيف تؤثر المسافة في قوة جذب المغناطيس؟",
+        "كيف تحدث الأصوات؟",
+        "تغيير الأصوات",
+        "كيف ينتشر الضوء"
+      ]
+    },
+    4: {
+      t1: [
+        "مما تتكون المخلوقات الحية؟",
+        "الخلايا والأنسجة والأعضاء",
+        "كيف أصنف المخلوقات الحية؟",
+        "ملاحظة مخلوق حي",
+        "كيف نعرف أن دودة الأرض حيوان؟",
+        "حركة قنديل البحر",
+        "ما وظيفة العمود الفقري؟",
+        "طيران الطيور",
+        "كيف تستجيب دورة الأرض للضوء؟",
+        "نموذج رئة",
+        "ماذا يمكن أن أجد في بيئتي؟",
+        "تربة المناطق الحيوية",
+        "ما مقدار الطاقة التي تستهلكها المخلوقات الحية؟",
+        "المحاليل",
+        "كيف يؤثر تغير النظام البيئي في المخلوقات الحية؟",
+        "تماسك التربة"
+      ],
+      t2: [
+        "ما سبب تعاقب الليل والنهار؟",
+        "الشمس والفصول",
+        "كيف أقارن بين أحجام الأجرام في النظام الشمسي؟",
+        "عمل نموذج للنظام الشمسي",
+        "كيف أقارن بين المواد؟",
+        "مقارنة الكثافة",
+        "هل نستطيع تغيير خصائص المادة الصلبة؟",
+        "الحرارة والتبخر",
+        "كيف تختلط المواد الصلبة مع الماء؟",
+        "فصل المخاليط",
+        "استخدام المتغيرات",
+        "ما سرعة الكرة الزجاجية؟",
+        "القصور والاحتكاك",
+        "كيف تغير القوى الحركية؟",
+        "الاحتكاك والحركة",
+        "كيف تحافظ الثدييات على دفء أجسامها في الأماكن الباردة؟",
+        "الحرارة والهواء",
+        "كيف تتفاعل البالونات المدلوكة؟",
+        "أعمل دائرة توازن",
+        "كيف تؤثر المغانط في بعضها؟",
+        "عمل المغناطيس الكهربائي"
+      ]
+    },
+    5: {
+      t1: [
+        "كيف يمكن تصنيف المخلوقات الحية؟",
+        "عفن الخبز",
+        "كيف ينتقل الماء في النباتات الوعائية؟",
+        "ملاحظة الجذور",
+        "هل تستطيع بعض النباتات الزهرية أن تتكاثر من دون بذور؟",
+        "لوحة التكاثر اللاجنسي",
+        "ما المراحل التي تمر بها دورة حياة الحيوان؟",
+        "نموذج الإخصاب الخارجي",
+        "ما الذي تحتاج إليه المخلوقات الحية لكي تعيش؟",
+        "كيف تكيفت دودة الأرض للعيش في بيئتها؟",
+        "تكيف الورقة",
+        "كيف تشكل قطرات الماء؟",
+        "ألاحظ جذور نبات بقولي",
+        "لعبة الانقراض"
+      ],
+      t2: [
+        "كيف تؤثر زاوية ميل أشعة الشمس في درجات الحرارة؟",
+        "الضغط الجوي والحجم",
+        "كيف تتكون قطرات المطر؟",
+        "التركيز على مهارة التواصل",
+        "ماذا يحدث عند التقاء كتلتين من الهواء مختلفتين في درجة الحرارة؟",
+        "إعصار قمعي داخل قنينة",
+        "كيف أعرف مكونات المادة؟",
+        "داخل الذرات والجزيئات",
+        "كيف أميز بين الفلزات واللافلزات؟",
+        "القساوة مقابل القابلية للتشكيل",
+        "أقارن بين الفلزات واللافلزات من حيث قابليتها للتوصيل الكهربائي",
+        "ماذا يحدث عندما ينصهر الجليد؟",
+        "البالونات المتغيرة",
+        "هل تتغير كتلة المادة في التغيرات الكيميائية؟",
+        "النحاس اللامع",
+        "ماذا يحدث للطاقة؟",
+        "قياس الطاقة المستعملة؟",
+        "ما الذي يسهل الشغل؟",
+        "الروافع والقوة",
+        "كيف يتكون الصوت؟",
+        "ناقلات الصوت",
+        "ما المسار الذي يسلكه الضوء عند انعكاسه؟",
+        "مزج الألوان"
+      ]
+    },
+    6: {
+      t1: [
+        "كيف تبدو الخلايا؟",
+        "المقارنة بين الخلايا في نسيج حيواني",
+        "فيم تختلف الخلايا النباتية عن الخلايا الحيوانية؟",
+        "الانتشار والخاصية الأسموزية",
+        "ما التنفس الخلوي؟",
+        "كيف تصبح الخلية الواحدة عدة خلايا؟",
+        "الانقسام المتساوي",
+        "ما بعض الصفات التي يرثها الإنسان؟",
+        "الصفات المورثة في الذرة",
+        "كيف يؤثر الضوء في النباتات؟",
+        "أوراق النباتات",
+        "ما درجات الحرارة التي تحفز نمو الخميرة؟",
+        "نمو العفن",
+        "كيف تساعد الأمعاء الغليظة على عملية الهضم؟",
+        "نموذج لصمام في الوريد",
+        "كيف تعمل العضلات؟",
+        "تكامل عمل أجهزة الجسم"
+      ],
+      t2: [
+        "كيف تعرف الكواكب؟",
+        "دوران الأرض حول محورها وحول الشمس",
+        "ما سبب تغير أوجه القمر؟",
+        "عمل نموذج للخسوف والكسوف",
+        "مهارة التواصل",
+        "كيف نميز بين الكوكب والنجم؟",
+        "حجم الكواكب",
+        "كيف يؤثر بعد النجم عن الأرض في سطوعه؟",
+        "الكون المتغير",
+        "ما كثافة الماء؟",
+        "تأثير الكثافة",
+        "هل يمكن فصل مكونات حبر قلم التخطيط؟",
+        "تحضير محلول مشبع",
+        "كيف يمكن فصل المخلوط؟",
+        "ماذا يحدث عندما يصدأ الفلز؟",
+        "سرعة التفاعل الكيميائي",
+        "ما الأحماض؟ وما القواعد؟",
+        "التعادل",
+        "كيف نقيس السرعة؟",
+        "سرعة الركض",
+        "هل تسقط الأجسام الأثقل بسرعة أكبر؟",
+        "القوى غير المتزنة المؤثرة في البالون",
+        "أي المفاتيح الكهربائية يتحكم في إضاءة كل مصباح كهربائي؟",
+        "قياس التيار الكهربائي",
+        "كيف تؤثر قوى المغناطيس؟",
+        "صنع مغناطيس كهربائي"
+      ]
+    }
   };
 
-  // ===== DOM =====
-  const $ = (s, root=document) => root.querySelector(s);
-  const view = $("#view");
-  const crumbs = $("#crumbs");
-  const lastSaved = $("#lastSaved");
+  // =====================
+  // ثوابت واجهة
+  // =====================
+  const REASONS = [
+    "لعدم توفر المواد",
+    "عدم تجهيز المحضر للأدوات",
+    "عدم قيام المعلم بالتجربة",
+    "أسباب أخرى"
+  ];
 
-  const btnHome = $("#btnHome");
-  const btnExportCsv = $("#btnExportCsv");
-  const btnClearTerm = $("#btnClearTerm");
+  const PLACES = [
+    "المختبر",
+    "الفصل",
+    "مكان آخر"
+  ];
 
-  const search = $("#search");
-  const filterStatus = $("#filterStatus");
-  const filterPlace = $("#filterPlace");
-
-  const dlg = $("#dlg");
-  const dlgTitle = $("#dlgTitle");
-  const dlgForm = $("#dlgForm");
-  const toast = $("#toast");
-
-  const f_subject = $("#f_subject");
-  const f_class = $("#f_class");
-  const f_title = $("#f_title");
-  const f_teacher = $("#f_teacher");
-  const f_week = $("#f_week");
-  const f_date = $("#f_date");
-  const f_placeOther = $("#f_placeOther");
-  const f_reasonOther = $("#f_reasonOther");
-  const f_notes = $("#f_notes");
-  const reasonsBox = $("#reasonsBox");
-
-  // ===== State/Storage =====
-  const STORAGE_KEY = "science_log_overrides_clean_v1";
-  const TS_KEY = STORAGE_KEY + "__ts";
-
+  // =====================
+  // الحالة العامة
+  // =====================
   const state = {
-    route: { grade:null, className:null, term:null },
-    ui: { q:"", status:"all", place:"all" },
-    overrides: loadJson(STORAGE_KEY, {})
+    grade: null,
+    term: null, // 't1' or 't2'
+    meta: {
+      className: "",
+      labTech: ""
+    }
   };
 
-  let activeItems = [];
-  let activeId = null;
+  // =====================
+  // أدوات تخزين
+  // =====================
+  const LS_KEY = "science_experiments_log_v1";
 
-  // ===== init =====
-  wire();
-  goHome();
-  updateLastSaved();
-
-  function wire(){
-    btnHome.addEventListener("click", goHome);
-
-    search.addEventListener("input", ()=>{
-      state.ui.q = search.value.trim();
-      renderTerm();
-    });
-    filterStatus.addEventListener("change", ()=>{
-      state.ui.status = filterStatus.value;
-      renderTerm();
-    });
-    filterPlace.addEventListener("change", ()=>{
-      state.ui.place = filterPlace.value;
-      renderTerm();
-    });
-
-    btnExportCsv.addEventListener("click", exportCSV);
-
-    btnClearTerm.addEventListener("click", ()=>{
-      const key = termKey();
-      if(!key) return;
-      if(!confirm("هل أنت متأكد من مسح جميع بيانات هذا الترم؟")) return;
-      delete state.overrides[key];
-      saveJson(STORAGE_KEY, state.overrides);
-      toastMsg("تم مسح بيانات الترم ✅");
-      renderTerm();
-    });
-
-    dlgForm.addEventListener("submit", (e)=>{
-      e.preventDefault();
-      saveModal();
-      dlg.close();
-    });
-
-    document.addEventListener("change", (e)=>{
-      if(e.target && e.target.name === "status") toggleReasons();
-      if(e.target && e.target.name === "place") togglePlaceOther();
-    });
-  }
-
-  // ===== Navigation =====
-  function goHome(){
-    state.route = { grade:null, className:null, term:null };
-    disableTools(true);
-    crumbs.textContent = "الرئيسية";
-    renderGrades();
-  }
-  function goGrade(grade){
-    state.route = { grade, className:null, term:null };
-    disableTools(true);
-    crumbs.textContent = `الرئيسية / الصف ${grade}`;
-    const g = DATA.grades.find(x=>x.grade===grade);
-    renderClasses(g);
-  }
-  function goClass(grade, className){
-    state.route = { grade, className, term:null };
-    disableTools(true);
-    crumbs.textContent = `الرئيسية / الصف ${grade} / ${className}`;
-    renderTerms(grade, className);
-  }
-  function goTerm(grade, className, term){
-    state.route = { grade, className, term };
-
-    state.ui = { q:"", status:"all", place:"all" };
-    search.value = "";
-    filterStatus.value = "all";
-    filterPlace.value = "all";
-
-    disableTools(false);
-    crumbs.textContent = `الرئيسية / الصف ${grade} / ${className} / ${term==="t1" ? "الترم الأول" : "الترم الثاني"}`;
-    renderTerm();
-  }
-
-  // ===== Render =====
-  const cardHandlers = new Map();
-
-  function renderGrades(){
-    view.innerHTML = `
-      <div class="grid-cards">
-        ${[1,2,3,4,5,6].map(g => cardHtml(`الصف ${g}`, `عرض الفصول والتجارب للصف ${g}`, ()=>goGrade(g))).join("")}
-      </div>
-    `;
-    bindCards();
-  }
-
-  function renderClasses(gradeObj){
-    const classes = gradeObj?.classes || [];
-    view.innerHTML = `
-      <div class="grid-cards">
-        ${
-          classes.length
-            ? classes.map(c=>{
-                const total = (c.terms?.t1?.length||0) + (c.terms?.t2?.length||0);
-                return cardHtml(`الفصل ${c.className}`, `إجمالي التجارب: ${total}`, ()=>goClass(gradeObj.grade, c.className));
-              }).join("")
-            : emptyHtml("لا توجد فصول.")
-        }
-      </div>
-    `;
-    bindCards();
-  }
-
-  function renderTerms(grade, className){
-    const cls = getClass(grade, className);
-    const t1 = cls?.terms?.t1?.length || 0;
-    const t2 = cls?.terms?.t2?.length || 0;
-
-    view.innerHTML = `
-      <div class="grid-cards">
-        ${cardHtml("الترم الأول", `عدد التجارب: ${t1}`, ()=>goTerm(grade, className, "t1"))}
-        ${cardHtml("الترم الثاني", `عدد التجارب: ${t2}`, ()=>goTerm(grade, className, "t2"))}
-      </div>
-    `;
-    bindCards();
-  }
-
-  function renderTerm(){
-    const cls = getClass(state.route.grade, state.route.className);
-    const base = (cls?.terms?.[state.route.term] || []).map(x => normalize(x, cls.className));
-
-    const key = termKey();
-    const overrides = (key && state.overrides[key]) ? state.overrides[key] : {};
-    const merged = base.map(it => ({...it, ...(overrides[it.id]||{})}));
-    activeItems = merged;
-
-    const filtered = merged.filter(it=>{
-      const q = state.ui.q;
-      const qOk = !q || it.title.includes(q) || (it.teacher||"").includes(q);
-      const sOk = state.ui.status==="all" ? true : it.status===state.ui.status;
-      const pOk = state.ui.place==="all" ? true : it.place===state.ui.place;
-      return qOk && sOk && pOk;
-    });
-
-    const stats = getStats(merged);
-
-    view.innerHTML = `
-      <div class="panel">
-        <div style="font-weight:900">ملخص سريع</div>
-        <div class="badges">
-          <span class="badge done">✔️ نُفّذ: ${stats.done}</span>
-          <span class="badge notDone">❗ لم يُنفّذ: ${stats.notDone}</span>
-          <span class="badge">📌 الإجمالي: ${stats.total}</span>
-        </div>
-        <div class="small" style="margin-top:8px">* يتم الحفظ تلقائيًا داخل المتصفح.</div>
-      </div>
-
-      ${
-        filtered.length
-          ? `<table>
-              <thead>
-                <tr>
-                  <th style="width:44px">م</th>
-                  <th>اسم التجربة</th>
-                  <th style="width:140px">الحالة</th>
-                  <th style="width:120px">الأسبوع</th>
-                  <th style="width:150px">التاريخ</th>
-                  <th style="width:140px">المكان</th>
-                  <th style="width:160px">المعلمة</th>
-                  <th style="width:110px">إجراء</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${filtered.map((it, i)=>rowHtml(it, i+1)).join("")}
-              </tbody>
-            </table>`
-          : emptyHtml("لا توجد نتائج مطابقة.")
-      }
-    `;
-
-    view.querySelectorAll("[data-edit]").forEach(el=>{
-      el.addEventListener("click", ()=> openModal(el.getAttribute("data-edit")));
-    });
-
-    updateLastSaved();
-  }
-
-  function rowHtml(it, idx){
-    const badge = it.status==="done"
-      ? `<span class="badge done">✔️ نُفّذ</span>`
-      : it.status==="notDone"
-        ? `<span class="badge notDone">❗ لم يُنفّذ</span>`
-        : `<span class="badge">— غير محدد</span>`;
-
-    const placeTxt = it.place==="lab" ? "المختبر"
-      : it.place==="class" ? "الفصل"
-      : it.place==="other" ? (it.placeOther || "مكان آخر")
-      : "—";
-
-    return `
-      <tr>
-        <td>${idx}</td>
-        <td>
-          <div style="font-weight:900">${esc(it.title)}</div>
-          <div class="small">المادة: ${esc(it.subject)} • الفصل: ${esc(it.className)}</div>
-        </td>
-        <td>${badge}</td>
-        <td>${it.week ?? "—"}</td>
-        <td>${it.date || "—"}</td>
-        <td>${esc(placeTxt)}</td>
-        <td>${esc(it.teacher || DATA.teacherNameDefault || "—")}</td>
-        <td><a class="link" data-edit="${esc(it.id)}">تعديل</a></td>
-      </tr>
-    `;
-  }
-
-  function cardHtml(title, meta, fn){
-    const id = "c_" + Math.random().toString(16).slice(2);
-    cardHandlers.set(id, fn);
-    return `
-      <div class="card" data-card="${id}">
-        <h3 class="title">${esc(title)}</h3>
-        <div class="meta">${esc(meta)}</div>
-      </div>
-    `;
-  }
-
-  function bindCards(){
-    view.querySelectorAll("[data-card]").forEach(el=>{
-      const id = el.getAttribute("data-card");
-      el.addEventListener("click", ()=> cardHandlers.get(id)?.());
-    });
-    cardHandlers.clear();
-  }
-
-  // ===== Modal =====
-  function openModal(id){
-    const it = activeItems.find(x=>x.id===id);
-    if(!it) return;
-
-    activeId = id;
-    dlgTitle.textContent = "تفاصيل: " + it.title;
-
-    f_subject.value = it.subject || "";
-    f_class.value = it.className || "";
-    f_title.value = it.title || "";
-
-    f_teacher.value = it.teacher || DATA.teacherNameDefault || "";
-    f_week.value = (it.week ?? "");
-    f_date.value = it.date || ""; // ✅ تفاعلي من التقويم
-
-    setRadio("place", it.place || "");
-    f_placeOther.value = it.placeOther || "";
-    togglePlaceOther();
-
-    setRadio("status", it.status || "");
-    toggleReasons();
-
-    setReasons(it.reasons || []);
-    f_reasonOther.value = it.reasonOther || "";
-    f_notes.value = it.notes || "";
-
-    dlg.showModal();
-  }
-
-  function saveModal(){
-    const it = activeItems.find(x=>x.id===activeId);
-    if(!it) return;
-
-    const place = getRadio("place");
-    const status = getRadio("status");
-
-    const updated = {
-      teacher: str(f_teacher.value) || DATA.teacherNameDefault || "",
-      week: f_week.value ? Number(f_week.value) : null,
-      date: str(f_date.value), // ✅ يُحفظ حسب اختيارك
-      place: place || null,
-      placeOther: place==="other" ? str(f_placeOther.value) : "",
-      status: status || null,
-      reasons: status==="notDone" ? getReasons() : [],
-      reasonOther: status==="notDone" ? str(f_reasonOther.value) : "",
-      notes: str(f_notes.value)
-    };
-
-    const key = termKey();
-    if(!key) return;
-
-    state.overrides[key] = state.overrides[key] || {};
-    state.overrides[key][it.id] = { ...(state.overrides[key][it.id]||{}), ...updated };
-
-    saveJson(STORAGE_KEY, state.overrides);
-    toastMsg("تم الحفظ ✅");
-    renderTerm();
-  }
-
-  function toggleReasons(){
-    const status = getRadio("status");
-    reasonsBox.style.display = (status==="notDone") ? "block" : "none";
-  }
-  function togglePlaceOther(){
-    const place = getRadio("place");
-    f_placeOther.style.display = (place==="other") ? "block" : "none";
-  }
-
-  function getReasons(){
-    const arr = [];
-    reasonsBox.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-      if(cb.checked) arr.push(cb.value);
-    });
-    return arr;
-  }
-  function setReasons(list){
-    const set = new Set(list||[]);
-    reasonsBox.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-      cb.checked = set.has(cb.value);
-    });
-  }
-
-  // ===== Export CSV =====
-  function exportCSV(){
-    if(!state.route.term) return;
-
-    const termLabel = state.route.term==="t1" ? "الأول" : "الثاني";
-    const rows = activeItems.map(it=>{
-      const placeTxt = it.place==="lab" ? "المختبر" : it.place==="class" ? "الفصل" : it.place==="other" ? "مكان آخر" : "";
-      return [
-        state.route.grade,
-        it.className,
-        termLabel,
-        it.subject,
-        it.title,
-        it.status || "",
-        it.week ?? "",
-        it.date || "",
-        placeTxt,
-        it.placeOther || "",
-        it.teacher || "",
-        (it.reasons||[]).join("|"),
-        it.reasonOther || "",
-        it.notes || ""
-      ];
-    });
-
-    const header = ["الصف","الفصل","الترم","المادة","اسم التجربة","الحالة","الأسبوع","التاريخ","المكان","مكان آخر","المعلمة","أسباب عدم التنفيذ","أسباب أخرى","ملاحظات"];
-    const csv = [header, ...rows].map(r=>r.map(csvCell).join(",")).join("\n");
-    download(`سجل-التجارب-صف${state.route.grade}-${state.route.className}-ترم${termLabel}.csv`, csv, "text/csv;charset=utf-8;");
-  }
-
-  // ===== Helpers =====
-  function getClass(grade, className){
-    const g = DATA.grades.find(x=>x.grade===grade);
-    if(!g) return null;
-    return g.classes.find(c=>c.className===className) || null;
-  }
-
-  function normalize(item, fallbackClass){
-    return {
-      id: String(item.id),
-      subject: item.subject || "علوم",
-      title: item.title || "",
-      className: item.classOverride || fallbackClass || "",
-      teacher: item.teacher || "",
-      week: item.week ?? null,
-      date: item.date || "",
-      place: item.place ?? null,
-      placeOther: item.placeOther || "",
-      status: item.status ?? null,
-      reasons: item.reasons || [],
-      reasonOther: item.reasonOther || "",
-      notes: item.notes || ""
-    };
-  }
-
-  function getStats(items){
-    let done=0, notDone=0;
-    items.forEach(it=>{
-      if(it.status==="done") done++;
-      if(it.status==="notDone") notDone++;
-    });
-    return { total: items.length, done, notDone };
-  }
-
-  function termKey(){
-    const r = state.route;
-    if(!r.grade || !r.className || !r.term) return null;
-    return `g${r.grade}_${r.className}_${r.term}`;
-  }
-
-  function disableTools(disabled){
-    search.disabled = disabled;
-    filterStatus.disabled = disabled;
-    filterPlace.disabled = disabled;
-    btnExportCsv.disabled = disabled;
-    btnClearTerm.disabled = disabled;
-  }
-
-  function emptyHtml(msg){
-    return `
-      <div class="panel">
-        <div style="font-weight:900">لا توجد بيانات</div>
-        <div class="small" style="margin-top:6px">${esc(msg)}</div>
-      </div>
-    `;
-  }
-
-  function setRadio(name, value){
-    document.querySelectorAll(`input[type="radio"][name="${name}"]`).forEach(r=>{
-      r.checked = (r.value === value);
-    });
-  }
-  function getRadio(name){
-    const r = document.querySelector(`input[type="radio"][name="${name}"]:checked`);
-    return r ? r.value : "";
-  }
-
-  function saveJson(key, val){
-    localStorage.setItem(key, JSON.stringify(val));
-    localStorage.setItem(TS_KEY, new Date().toISOString());
-    updateLastSaved();
-  }
-  function loadJson(key, fallback){
+  function loadAll(){
     try{
-      const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
-    }catch{
-      return fallback;
+      const raw = localStorage.getItem(LS_KEY);
+      return raw ? JSON.parse(raw) : { meta:{}, entries:{} };
+    }catch(e){
+      return { meta:{}, entries:{} };
+    }
+  }
+  function saveAll(obj){
+    localStorage.setItem(LS_KEY, JSON.stringify(obj));
+  }
+
+  function getPathKey(grade, term){
+    return `g${grade}_${term}`;
+  }
+
+  function getEntries(grade, term){
+    const all = loadAll();
+    const k = getPathKey(grade, term);
+    return all.entries?.[k] || {};
+  }
+
+  function setEntry(grade, term, idx, entry){
+    const all = loadAll();
+    all.entries = all.entries || {};
+    const k = getPathKey(grade, term);
+    all.entries[k] = all.entries[k] || {};
+    all.entries[k][idx] = entry;
+    saveAll(all);
+  }
+
+  function clearTerm(grade, term){
+    const all = loadAll();
+    const k = getPathKey(grade, term);
+    if(all.entries && all.entries[k]) delete all.entries[k];
+    saveAll(all);
+  }
+
+  function resetAll(){
+    localStorage.removeItem(LS_KEY);
+  }
+
+  function loadMeta(){
+    const all = loadAll();
+    state.meta.className = all.meta?.className || "";
+    state.meta.labTech = all.meta?.labTech || "";
+    el.className.value = state.meta.className;
+    el.labTech.value = state.meta.labTech;
+  }
+
+  function saveMeta(){
+    const all = loadAll();
+    all.meta = all.meta || {};
+    all.meta.className = (el.className.value || "").trim();
+    all.meta.labTech = (el.labTech.value || "").trim();
+    saveAll(all);
+    state.meta.className = all.meta.className;
+    state.meta.labTech = all.meta.labTech;
+    toast("تم حفظ الإعدادات ✅");
+  }
+
+  // =====================
+  // عناصر DOM
+  // =====================
+  const el = {
+    crumbs: document.getElementById('crumbs'),
+    viewHome: document.getElementById('viewHome'),
+    viewTerm: document.getElementById('viewTerm'),
+    viewTable: document.getElementById('viewTable'),
+    gradeGrid: document.getElementById('gradeGrid'),
+    termGrid: document.getElementById('termGrid'),
+    termTitle: document.getElementById('termTitle'),
+    tableTitle: document.getElementById('tableTitle'),
+    tbody: document.getElementById('tbody'),
+    pathNow: document.getElementById('pathNow'),
+    statTotal: document.getElementById('statTotal'),
+    statDone: document.getElementById('statDone'),
+    statNot: document.getElementById('statNot'),
+    btnBackToHome: document.getElementById('btnBackToHome'),
+    btnBackToTerm: document.getElementById('btnBackToTerm'),
+    btnPrint: document.getElementById('btnPrint'),
+    btnExport: document.getElementById('btnExport'),
+    btnClearThis: document.getElementById('btnClearThis'),
+    btnResetAll: document.getElementById('btnResetAll'),
+    className: document.getElementById('className'),
+    labTech: document.getElementById('labTech'),
+    btnSaveMeta: document.getElementById('btnSaveMeta')
+  };
+
+  // =====================
+  // مساعدات UI
+  // =====================
+  function show(view){
+    el.viewHome.classList.toggle('hidden', view !== 'home');
+    el.viewTerm.classList.toggle('hidden', view !== 'term');
+    el.viewTable.classList.toggle('hidden', view !== 'table');
+    renderCrumbs();
+  }
+
+  function gradeLabel(g){
+    const map = {1:"الصف الأول",2:"الصف الثاني",3:"الصف الثالث",4:"الصف الرابع",5:"الصف الخامس",6:"الصف السادس"};
+    return map[g] || `الصف ${g}`;
+  }
+
+  function termLabel(t){
+    return t === 't1' ? 'الترم الأول' : 'الترم الثاني';
+  }
+
+  function renderCrumbs(){
+    const parts = [];
+    parts.push({label:"الرئيسية", action:()=>goHome(), active: !state.grade});
+    if(state.grade){
+      parts.push({label: gradeLabel(state.grade), action:()=>goTerm(state.grade)});
+    }
+    if(state.grade && state.term){
+      parts.push({label: termLabel(state.term), action:()=>goTable(state.grade, state.term), active:true});
+    }
+
+    el.crumbs.innerHTML = '';
+    parts.forEach((p, i)=>{
+      const span = document.createElement('span');
+      if(i>0) span.textContent = '›';
+      el.crumbs.appendChild(span);
+
+      if(p.active){
+        const s = document.createElement('span');
+        s.textContent = p.label;
+        el.crumbs.appendChild(s);
+      }else{
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = p.label;
+        b.addEventListener('click', p.action);
+        el.crumbs.appendChild(b);
+      }
+    });
+
+    // المسار الحالي في الملخص
+    if(!state.grade){
+      el.pathNow.textContent = '—';
+    }else if(state.grade && !state.term){
+      el.pathNow.textContent = `${gradeLabel(state.grade)} / —`;
+    }else{
+      const extra = [];
+      if(state.meta.className) extra.push(`الشعبة: ${state.meta.className}`);
+      if(state.meta.labTech) extra.push(`محضر/ة المختبر: ${state.meta.labTech}`);
+      el.pathNow.textContent = `${gradeLabel(state.grade)} / ${termLabel(state.term)}${extra.length?" • "+extra.join(" • "):""}`;
     }
   }
 
-  function updateLastSaved(){
-    const ts = localStorage.getItem(TS_KEY);
-    if(!ts){ lastSaved.textContent = "—"; return; }
-    lastSaved.textContent = new Date(ts).toLocaleString("ar-SA");
+  function toast(msg){
+    const t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position:'fixed',
+      bottom:'16px',
+      right:'16px',
+      zIndex:9999,
+      background:'rgba(15,122,58,.95)',
+      color:'#fff',
+      padding:'10px 12px',
+      borderRadius:'14px',
+      boxShadow:'0 10px 24px rgba(16,24,40,.18)',
+      fontWeight:'800',
+      fontSize:'13px'
+    });
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .25s ease'}, 1200);
+    setTimeout(()=>t.remove(), 1550);
   }
 
-  function toastMsg(msg){
-    toast.textContent = msg;
-    toast.classList.add("show");
-    setTimeout(()=>toast.classList.remove("show"), 1200);
+  // =====================
+  // بناء الواجهات
+  // =====================
+  function renderGrades(){
+    el.gradeGrid.innerHTML='';
+    for(let g=1; g<=6; g++){
+      const total = (EXPERIMENTS[g]?.t1?.length || 0) + (EXPERIMENTS[g]?.t2?.length || 0);
+      const tile = document.createElement('button');
+      tile.type='button';
+      tile.className='tile';
+      tile.innerHTML = `<div><strong>${gradeLabel(g)}</strong><div><small>إجمالي التجارب: ${total}</small></div></div><div aria-hidden="true">⬅</div>`;
+      tile.addEventListener('click', ()=>goTerm(g));
+      el.gradeGrid.appendChild(tile);
+    }
   }
 
-  function csvCell(v){
-    const s = String(v ?? "");
-    if (/[,"\n]/.test(s)) return '"' + s.replaceAll('"','""') + '"';
-    return s;
-  }
-  function download(filename, content, mime){
-    const blob = new Blob([content], {type:mime});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+  function renderTerms(grade){
+    el.termGrid.innerHTML='';
+    const t1Count = EXPERIMENTS[grade]?.t1?.length || 0;
+    const t2Count = EXPERIMENTS[grade]?.t2?.length || 0;
+    const terms = [
+      {key:'t1', label:'الترم الأول', count: t1Count},
+      {key:'t2', label:'الترم الثاني', count: t2Count},
+    ];
+    terms.forEach(t=>{
+      const tile = document.createElement('button');
+      tile.type='button';
+      tile.className='tile';
+      tile.innerHTML = `<div><strong>${t.label}</strong><div><small>عدد التجارب: ${t.count}</small></div></div><div aria-hidden="true">⬅</div>`;
+      tile.addEventListener('click', ()=>goTable(grade, t.key));
+      el.termGrid.appendChild(tile);
+    });
   }
 
-  function esc(str){
-    return String(str ?? "")
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-  }
-  function str(s){ return String(s ?? "").trim(); }
+  function renderTable(grade, term){
+    const list = EXPERIMENTS?.[grade]?.[term] || [];
+    const saved = getEntries(grade, term);
 
-})();
+    el.tbody.innerHTML='';
+
+    list.forEach((name, i)=>{
+      const idx = String(i);
+      const data = saved[idx] || {
+        date:'',
+        status:'', // 'done'|'not'
+        week:'',
+        place:'',
+        reason:'',
+        notes:''
+      };
+
+      const tr = document.createElement('tr');
+
+      const tdNo = document.createElement('td');
+      tdNo.textContent = (i+1);
+      tdNo.style.fontWeight='900';
+
+      const tdName = document.createElement('td');
+      tdName.innerHTML = `<div class="rowTitle">${escapeHtml(name)}</div><div class="muted">مادة: علوم</div>`;
+
+      const tdDate = document.createElement('td');
+      const date = document.createElement('input');
+      date.type='date';
+      date.value = data.date || '';
+      date.addEventListener('input', ()=>persist());
+      tdDate.appendChild(date);
+
+      const tdStatus = document.createElement('td');
+      const wrap = document.createElement('div');
+      wrap.className='toggle';
+      wrap.innerHTML = `
+        <label><input type="radio" name="st_${grade}_${term}_${i}" value="done"> نُفِّذت</label>
+        <label><input type="radio" name="st_${grade}_${term}_${i}" value="not"> لم تُنفَّذ</label>
+      `;
+      tdStatus.appendChild(wrap);
+
+      const stDone = wrap.querySelector('input[value="done"]');
+      const stNot = wrap.querySelector('input[value="not"]');
+      if(data.status === 'done') stDone.checked = true;
+      if(data.status === 'not') stNot.checked = true;
+      stDone.addEventListener('change', ()=>{reasonSel.disabled = true; reasonSel.value=''; persist();});
+      stNot.addEventListener('change', ()=>{reasonSel.disabled = false; persist();});
+
+      const tdWeek = document.createElement('td');
+      const week = document.createElement('input');
+      week.type='number';
+      week.min='1';
+      week.max='20';
+      week.placeholder='مثال: 3';
+      week.value = data.week || '';
+      week.addEventListener('input', ()=>persist());
+      tdWeek.appendChild(week);
+
+      const tdPlace = document.createElement('td');
+      const place = document.createElement('select');
+      place.innerHTML = `<option value="">— اختاري —</option>` + PLACES.map(p=>`<option value="${escapeAttr(p)}">${escapeHtml(p)}</option>`).join('');
+      place.value = data.place || '';
+      place.addEventListener('change', ()=>persist());
+      tdPlace.appendChild(place);
+
+      const tdReason = document.createElement('td');
+      const reasonSel = document.createElement('select');
+      reasonSel.innerHTML = `<option value="">—</option>` + REASONS.map(r=>`<option value="${escapeAttr(r)}">${escapeHtml(r)}</option>`).join('');
+      reasonSel.value = data.reason || '';
+      reasonSel.disabled = data.status !== 'not';
+      reasonSel.addEventListener('change', ()=>persist());
+      tdReason.appendChild(reasonSel);
+
+      const tdNotes = document.createElement('td');
+      const notes = document.createElement('textarea');
+      notes.placeholder = 'ملاحظات أو توقيع المعلمة';
+      notes.value = data.notes || '';
+      notes.addEventListener('input', ()=>persist());
+      tdNotes.appendChild(notes);
+
+      tr.append(tdNo, tdName, tdDate, tdStatus, tdWeek, tdPlace, tdReason, tdNotes);
+      el.tbody.appendChild(tr);
+
+      function persist(){
+        const status = stDone.checked ? 'done' : stNot.checked ? 'not' : '';
+        const entry = {
+          date: date.value || '',
+          status,
+          week: week.value || '',
+          place: place.value || '',
+          reason: (status==='not') ? (reasonSel.value || '') : '',
+          notes: notes.value || ''
+        };
+        setEntry(grade, term, idx, entry);
+        updateStats(grade, term);
+      }
+    });
+
+    updateStats(grade, term);
+  }
+
+  function updateStats(grade, term){
+    const list = EXPERIMENTS?.[grade]?.[term] || [];
+    const saved = getEntries(grade, term);
+    let done = 0, not = 0;
+    list.forEach((_, i)=>{
+      const e = saved[String(i)];
+      if(e?.status === 'done') done++;
+      if(e?.status === 'not') not++;
+    });
+    el.statTotal.textContent = `الإجمالي: ${list.length}`;
+    el.statDone.textContent = `نُفِّذت: ${done}`;
+    el.statNot.textContent = `لم تُنفَّذ: ${not}`;
+  }
+
+  // =====================
+  // تنقّل
+  // =====================
+  function goHome(){
+    state.grade = null;
+    state.term = null;
+    show('home');
+  }
+
+  function goTerm(grade){
+    state.grade = grade;
+    state.term = null;
+    el.termTitle.textContent = `اختيار الترم – ${gradeLabel(grade)}`;
+    renderTerms(grade);
+    show('term');
+  }
+
+  function goTable(grade, term){
+    state.grade = grade;
+    state.term = term;
+    el.tableTitle.textContent = `التجارب – ${gradeLabel(grade)} – ${termLabel(term)}`;
+    renderTable(grade, term);
+    show('table');
+  }
+
+  // =====================
+  // حماية بسيطة للنصوص
+  // =====================
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+  function escapeAttr(s){
+    return escapeHtml(s);
+  }
+
+  // =====================
+  // أحداث
+  // =====================
+  el.btnBackToHome.addEventListener('click', ()=>goHome());
+  el.btnBackToTerm.addEventListener('click', ()=>goTerm(state.grade));
+  el.btnPrint.addEventListener('click', ()=>window.print());
+  el.btnExport.addEventListener('click', ()=>window.print());
+
+  el.btnClearThis.addEventListener('click', ()=>{
+    if(!state.grade || !state.term) return;
+    const ok = confirm('هل تريدين مسح بيانات هذا الترم فقط؟');
+    if(!ok) return;
+    clearTerm(state.grade, state.term);
+    renderTable(state.grade, state.term);
+    toast('تم مسح بيانات الترم ✅');
+  });
+
+  el.btnResetAll.addEventListener('click', ()=>{
+    const ok = confirm('سيتم حذف كل البيانات المحفوظة على هذا المتصفح. هل أنتِ متأكدة؟');
+    if(!ok) return;
+    resetAll();
+    loadMeta();
+    toast('تم الحذف ✅');
+  });
+
+  el.btnSaveMeta.addEventListener('click', ()=>saveMeta());
+
+  // =====================
+  // تشغيل
+  // =====================
+  renderGrades();
+  loadMeta();
+  goHome();
 </script>
 </body>
 </html>
